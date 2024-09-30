@@ -1,11 +1,14 @@
 // pages/[id]/index.js
+import styles from '@styles/styles.module.css'
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 
 const ImagePage = () => {
   const router = useRouter();
-  const { id } = router.query; // Get the id from the URL
-  console.log('Current ID:', id);
+  //const { id } = router.query; // Get the id from the URL
+  const { id, title1, title2 } = router.query;
+  console.log(title1);
 
   const [cropImages, setCropImages] = useState([]);
   const [traceImages, setTraceImages] = useState([]);
@@ -13,7 +16,7 @@ const ImagePage = () => {
 
   useEffect(() => {
     if (!id) return; // id tanımlı değilse hiçbir şey yapma
-  
+
     const fetchImages = async (directory) => {
       const response = await fetch(`/api/images?dir=${encodeURIComponent(directory)}`);
       if (!response.ok) {
@@ -21,21 +24,21 @@ const ImagePage = () => {
       }
       return await response.json();
     };
-  
+
     const fetchAllImages = async () => {
       try {
         const [cropData, traceData] = await Promise.all([
           fetchImages(`${id}/crop`),
           fetchImages(`${id}/demo`),
         ]);
-  
+
         setCropImages(cropData);
         setTraceImages(traceData);
       } catch (error) {
         console.error('Failed to fetch images:', error);
       }
     };
-  
+
     fetchAllImages();
   }, [id]);
 
@@ -48,35 +51,50 @@ const ImagePage = () => {
 
   return (
     <div>
-      <h2>Crop Images</h2>
-      {cropImages.length > 0 ? (
-        <div>
-          <img
-            //src = "/assets/0bc07337743ba8a989eb940729daa1bc/crop/000015_0.png"
-            src={`/assets/${id}/crop/${cropImages[currentIndex % cropImages.length].name}`}
-            //src={cropImages[currentIndex % cropImages.length].url}
-            alt={cropImages[currentIndex % cropImages.length].name}
+      <div className={styles.middle}>
+          <p>{title1}</p>
+          <Image
+            src={`/assets/${id}/trace.jpeg`}
+            alt={id}
+            width={840} // İstediğin genişliği belirt
+            height={472.5} // İstediğin yüksekliği belirt
+            title={`${title1}`} // Dinamik olarak title ekle
           />
-          <p>{cropImages[currentIndex % cropImages.length].name}</p>
         </div>
-      ) : (
-        <p>No Crop Images available.</p>
-      )}
+        <div className={styles.ctas}>
 
-      <h2>Trace Images</h2>
       {traceImages.length > 0 ? (
         <div>
-          <img
+          <Image
             src={`/assets/${id}/demo/${traceImages[currentIndex % traceImages.length].name}`}
             alt={traceImages[currentIndex % traceImages.length].name}
+            width={640} // İstediğin genişliği belirt
+            height={360} // İstediğin yüksekliği belirt
           />
-          <p>{traceImages[currentIndex % traceImages.length].name}</p>
         </div>
       ) : (
         <p>No Trace Images available.</p>
       )}
 
-      <button onClick={handleNext}>Next Image</button>
+      {cropImages.length > 0 ? (
+        <div>
+          <Image
+            src={`/assets/${id}/crop/${cropImages[currentIndex % cropImages.length].name}`}
+            alt={cropImages[currentIndex % cropImages.length].name}
+            width={100} // İstediğin genişliği belirt
+            height={100} // İstediğin yüksekliği belirt
+          />
+        </div>
+      ) : (
+        <p>No Crop Images available.</p>
+      )}
+      </div>
+      <div className={styles.buttons}>
+          <button className={styles.button} onClick={handleNext} style={{ color: "#000000", backgroundColor: "#A4F89F" }} > YES</button>
+          <button className={styles.button} onClick={handleNext} style={{ color: "#000000", backgroundColor: "#D5D5D5" }} > AMBIGUOUS</button>
+          <button className={styles.button} onClick={handleNext} style={{ color: "#000000", backgroundColor: "#FF644E" }} > NO</button>  
+        </div>
+
     </div>
   );
 };
