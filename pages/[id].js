@@ -3,12 +3,13 @@ import styles from '@styles/styles.module.css'
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
-
+var ImageKit = require("imagekit");
 const ImagePage = () => {
   const router = useRouter();
   const { id } = router.query; // Get the id from the URL
-  //const { id, title1, title2 } = router.query;
-
+  const publicKey = process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY
+  const privateKey = process.env.NEXT_PUBLIC_IMAGEKIT_PRIVATE_KEY
+  const urlEndpoint = process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT
 
   const [cropImages, setCropImages] = useState([]);
   const [traceImages, setTraceImages] = useState([]);
@@ -17,29 +18,27 @@ const ImagePage = () => {
   useEffect(() => {
     if (!id) return; // id tanımlı değilse hiçbir şey yapma
 
-    const fetchImages = async (directory) => {
-      const response = await fetch(`/api/images?dir=${encodeURIComponent(directory)}`);
-      if (!response.ok) {
-        throw new Error(`Error fetching images from ${directory}`);
-      }
-      return await response.json();
-    };
-
-    const fetchAllImages = async () => {
-      try {
-        const [cropData, traceData] = await Promise.all([
-          fetchImages(`${id}/crop`),
-          fetchImages(`${id}/demo`),
-        ]);
-
-        setCropImages(cropData);
-        setTraceImages(traceData);
-      } catch (error) {
-        console.error('Failed to fetch images:', error);
-      }
-    };
-
-    fetchAllImages();
+    var imagekit = new ImageKit({
+      publicKey : publicKey,
+      privateKey : privateKey,
+      urlEndpoint : urlEndpoint
+  });
+  
+  imagekit.listFiles({
+      path: `idil/${id}/demo`,
+      limit : 300
+  }, function(error, result) { 
+      if(error) console.log(error);
+      else setTraceImages(result);
+  });
+  
+  imagekit.listFiles({
+    path: `idil/${id}/demo`,
+    limit : 300
+}, function(error, result) { 
+    if(error) console.log(error);
+    else setCropImages(result);
+});
   }, [id]);
 
   const handleNext = () => {
@@ -48,6 +47,8 @@ const ImagePage = () => {
       return newIndex >= Math.max(cropImages.length, traceImages.length) ? 0 : newIndex;
     });
   };
+
+
 
   return (
     <div>
@@ -93,7 +94,6 @@ const ImagePage = () => {
           <button className={styles.button} onClick={handleNext} style={{ color: "#000000", backgroundColor: "#D5D5D5" }} > AMBIGUOUS</button>
           <button className={styles.button} onClick={handleNext} style={{ color: "#000000", backgroundColor: "#FF644E" }} > NO</button>  
         </div>
-
     </div>
   );
 };
