@@ -6,8 +6,8 @@ import Image from 'next/image';
 
 const ImagePage = () => {
   const router = useRouter();
-  //const { id } = router.query; // Get the id from the URL
-  const { id, title1, title2 } = router.query;
+  const { id } = router.query; // Get the id from the URL
+  //const { id, title1, title2 } = router.query;
   console.log(title1);
 
   const [cropImages, setCropImages] = useState([]);
