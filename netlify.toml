@@ -1,2 +1,3 @@
-[functions]
-  node_bundler = "esbuild"
+[build]
+  functions = "./functions"
+  bodySizeLimit = 104857600 # Set the limit according to your requirements
