@@ -8,7 +8,7 @@ const ImagePage = () => {
   const router = useRouter();
   const { id } = router.query; // Get the id from the URL
   //const { id, title1, title2 } = router.query;
-  console.log(title1);
+
 
   const [cropImages, setCropImages] = useState([]);
   const [traceImages, setTraceImages] = useState([]);
@@ -52,13 +52,12 @@ const ImagePage = () => {
   return (
     <div>
       <div className={styles.middle}>
-          <p>{title1}</p>
           <Image
             src={`/assets/${id}/trace.jpeg`}
             alt={id}
             width={840} // İstediğin genişliği belirt
             height={472.5} // İstediğin yüksekliği belirt
-            title={`${title1}`} // Dinamik olarak title ekle
+            //title={`${title1}`} // Dinamik olarak title ekle
           />
         </div>
         <div className={styles.ctas}>
