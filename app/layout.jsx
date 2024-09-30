@@ -1,5 +1,5 @@
 import '@styles/globals.css'
-
+import Navbar from '@components/Navbar'
 //export const metadata = { title: "Trace Demo", description: 'Trace Demo'}
 
 const RootLayout = ({children}) => {
@@ -9,7 +9,7 @@ const RootLayout = ({children}) => {
         <div className='main'>
           <div className='gradient' />
         </div>
-
+        <Navbar/>
         <main className='app'>
           {children}
         </main>

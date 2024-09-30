@@ -3,6 +3,10 @@ import styles from '@styles/styles.module.css'
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
+import Navbar from '@components/Navbar';
+import Link from 'next/link';
+
+
 var ImageKit = require("imagekit");
 const ImagePage = () => {
   const router = useRouter();
@@ -51,7 +55,11 @@ const ImagePage = () => {
 
 
   return (
-    <div>
+    <div className={styles.idpage}>
+      <Navbar/>
+      <Link href="/">
+          <button className={styles.stickybutton}>Home</button>
+        </Link>
       <div className={styles.middle}>
           <Image
             src={`/assets/${id}/trace.jpeg`}
