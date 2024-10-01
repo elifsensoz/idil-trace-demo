@@ -1,4 +1,3 @@
-import styles from '@styles/styles.module.css'
 import Grid from '@components/Grid';
 
 

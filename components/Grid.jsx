@@ -1,6 +1,7 @@
 "use client"
 import Link from 'next/link';
 import Image from 'next/image';
+import styles from '@styles/styles.module.css'
 
 const gridItems = [
   {
@@ -44,9 +45,9 @@ const Grid = () => {
             <Image
               src={item.url}
               alt={`GIF ${item.id}`}
-              width={300} // Genişliği buradan ayarlayın
-              height={200} // Yüksekliği buradan ayarlayın
-              style={{ objectFit: 'cover' }} // Görüntüyü kapsayan stil
+              width={500} // Genişliği buradan ayarlayın
+              height={281.48} // Yüksekliği buradan ayarlayın
+              className={styles.roundedimage}
             />
           </div>
         </Link>

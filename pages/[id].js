@@ -22,6 +22,15 @@ const ImagePage = () => {
   const [startTime, setStartTime] = useState(null);     // Zamanlayıcı başlangıcı
   const [elapsedTime, setElapsedTime] = useState(0);    // Geçen süre
   const [totalTime, setTotalTime] = useState(null);     // Toplam süre
+  const [title, setTitle] = useState("");
+  const titlesEnum = {
+    "0bc07337743ba8a989eb940729daa1bc": "Is this a point on the cement with the mouse trace?", //cement
+    "0d05fa3d5029996fc451030f8685f793": "Is this a point on the bouncy castle with the mouse trace?", //bouncy castle
+    "3c2f8b46c4ae5794161da1759cd61d91": "Is this a point on the eruption with the mouse trace?", //eruption
+    "48f59dad571e07dd2b218e87d0170e9f": "Is this a point on the langur with the mouse trace?", //langur
+    "a8341fa97ad40719aa4973384e047a8e": "Is this a point on the handkerchief with the mouse trace?", //handkerchief
+    "e90e92088e7e8bdf59daaec46cf76ac3": "Is this a point on the ship with the mouse trace?", //ship
+  };
 
   useEffect(() => {
     if (!id) return; // id tanımlı değilse hiçbir şey yapma
@@ -79,6 +88,10 @@ const ImagePage = () => {
     return () => clearInterval(timer);  // Bileşen temizlenirken zamanlayıcıyı temizle
   }, [startTime, isActive]);
 
+  useEffect(() => {
+    setTitle(titlesEnum[id])
+  }, [id]);
+
 
 
   return (
@@ -91,13 +104,13 @@ const ImagePage = () => {
           <Image
             src={`/assets/${id}/trace.jpeg`}
             alt={id}
-            width={840} // İstediğin genişliği belirt
-            height={472.5} // İstediğin yüksekliği belirt
-            //title={`${title1}`} // Dinamik olarak title ekle
+            width={400} // İstediğin genişliği belirt
+            height={225} // İstediğin yüksekliği belirt
+            className={styles.roundedimage}
           />
         </div>
+        <div className={styles.middle}><p>{title}</p></div>
         <div className={styles.ctas}>
-
       {traceImages.length > 0 ? (
         <div>
           <Image
@@ -105,6 +118,7 @@ const ImagePage = () => {
             alt={traceImages[currentIndex % traceImages.length].name}
             width={640} // İstediğin genişliği belirt
             height={360} // İstediğin yüksekliği belirt
+            className={styles.roundedimage}
           />
         </div>
       ) : (
@@ -118,6 +132,7 @@ const ImagePage = () => {
             alt={cropImages[currentIndex % cropImages.length].name}
             width={100} // İstediğin genişliği belirt
             height={100} // İstediğin yüksekliği belirt
+            className={styles.roundedimage}
           />
         </div>
       ) : (
@@ -131,7 +146,7 @@ const ImagePage = () => {
           <button className={styles.button} onClick={handleNext} style={{ color: "#000000", backgroundColor: "#FF644E" }} > NO</button>  
         </div> )}
         {!isActive && (<div className={styles.buttons}>
-          <p> Annotation is done! Total Time: {totalTime} seconds</p>
+          <p> Annotation is done! Total Time: {totalTime} seconds.</p>
           </div> )}
     </div>
   );

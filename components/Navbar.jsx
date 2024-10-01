@@ -5,7 +5,7 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="logo">
-        <Link href="/">Point-VOS: Pointing Up Video Object Segmentation</Link>
+        <Link href="https://pointvos.github.io/" target="_blank" rel="noopener noreferrer">Point-VOS: Pointing Up Video Object Segmentation</Link>
       </div>
       
       <style jsx>{`
