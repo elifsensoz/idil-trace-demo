@@ -45,8 +45,8 @@ const Grid = () => {
             <Image
               src={item.url}
               alt={`GIF ${item.id}`}
-              width={300} // Genişliği buradan ayarlayın
-              height={168.89} // Yüksekliği buradan ayarlayın
+              width={400} // Genişliği buradan ayarlayın
+              height={225.19} // Yüksekliği buradan ayarlayın
               className={styles.roundedimage}
             />
           </div>
