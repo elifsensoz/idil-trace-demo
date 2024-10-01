@@ -5,7 +5,6 @@ import Grid from '@components/Grid';
 const Menu = () => {
   return (
     <div>
-      <h2>Navigate to Image Pages</h2>
       <Grid/>
     </div>
   )

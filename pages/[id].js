@@ -17,7 +17,11 @@ const ImagePage = () => {
 
   const [cropImages, setCropImages] = useState([]);
   const [traceImages, setTraceImages] = useState([]);
+  const [isActive, setIsActive] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0); // Single index for both lists
+  const [startTime, setStartTime] = useState(null);     // Zamanlayıcı başlangıcı
+  const [elapsedTime, setElapsedTime] = useState(0);    // Geçen süre
+  const [totalTime, setTotalTime] = useState(null);     // Toplam süre
 
   useEffect(() => {
     if (!id) return; // id tanımlı değilse hiçbir şey yapma
@@ -46,11 +50,34 @@ const ImagePage = () => {
   }, [id]);
 
   const handleNext = () => {
+    if (!startTime) {
+      setStartTime(Date.now());
+    }
     setCurrentIndex((prevIndex) => {
       const newIndex = prevIndex + 1;
-      return newIndex >= Math.max(cropImages.length, traceImages.length) ? 0 : newIndex;
+
+      // Eğer yeni index her iki dizinin uzunluğunu aşarsa
+      if (newIndex >= Math.max(cropImages.length, traceImages.length)) {
+        setIsActive(false);  // isActive bayrağını false yap
+        setTotalTime(Math.floor((Date.now() - startTime) / 1000)); 
+        return prevIndex;    // Indexi sabit tut (arttırma)
+      } else {
+        return newIndex;     // Yeni indexi döndür
+      }
     });
   };
+
+  useEffect(() => {
+    let timer;
+    if (startTime && isActive) {
+      // Eğer zamanlayıcı başlatılmışsa her saniye geçen süreyi güncelle
+      timer = setInterval(() => {
+        setElapsedTime(Math.floor((Date.now() - startTime) / 1000));  // Saniye cinsinden hesapla
+      }, 1000);
+    }
+
+    return () => clearInterval(timer);  // Bileşen temizlenirken zamanlayıcıyı temizle
+  }, [startTime, isActive]);
 
 
 
@@ -97,11 +124,15 @@ const ImagePage = () => {
         <p>No Crop Images available.</p>
       )}
       </div>
-      <div className={styles.buttons}>
+      
+      {isActive && (<div className={styles.buttons}>
           <button className={styles.button} onClick={handleNext} style={{ color: "#000000", backgroundColor: "#A4F89F" }} > YES</button>
           <button className={styles.button} onClick={handleNext} style={{ color: "#000000", backgroundColor: "#D5D5D5" }} > AMBIGUOUS</button>
           <button className={styles.button} onClick={handleNext} style={{ color: "#000000", backgroundColor: "#FF644E" }} > NO</button>  
-        </div>
+        </div> )}
+        {!isActive && (<div className={styles.buttons}>
+          <p> Annotation is done! Total Time: {totalTime} seconds</p>
+          </div> )}
     </div>
   );
 };
